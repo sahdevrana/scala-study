@@ -1,6 +1,6 @@
 package sahdev.learning.scala.implicits
 
-class ImplicitParameter {
+object ImplicitParameter {
  implicit val myName = "Sahdev Rana" //Create an implicit variable using implicit keyword.
  
  def main(args: Array[String]): Unit = {

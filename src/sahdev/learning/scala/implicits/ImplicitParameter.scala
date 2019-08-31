@@ -4,11 +4,11 @@ object ImplicitParameter {
  implicit val myName = "Sahdev Rana" //Create an implicit variable using implicit keyword.
  
  def main(args: Array[String]): Unit = {
-   val returnedImplicitValue = implicitVariableUsedMethod(25)
-   val returnedPassedValue = implicitVariableUsedMethod(28)("Battery")
+   val returnedImplicitValue = implicitVariableUsedMethod(25) //Called same method with one parameter only.
+   val returnedPassedValue = implicitVariableUsedMethod(28)("Battery") //Called second method with all parameters.
    
-   println("Returned vales are : "+returnedImplicitValue(0)+", "+returnedImplicitValue(1))
-   println("Returned vales are : "+returnedPassedValue(0)+", "+returnedPassedValue(1))
+   println("Returned vales are : "+returnedImplicitValue(0)+", "+returnedImplicitValue(1)) //Output: Sahdev Rana, 25
+   println("Returned vales are : "+returnedPassedValue(0)+", "+returnedPassedValue(1)) // Output: Battery, 28
    
    
  }

@@ -1,4 +1,4 @@
-package sahdev.leearning.scala.implisit
+package sahdev.learning.scala.implicits
 
 import scala.util.Random
 

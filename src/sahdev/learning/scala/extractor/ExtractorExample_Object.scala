@@ -42,7 +42,6 @@ object ExtractorExample {
 					{
 						None
 					}
-			
 	}
 	
 

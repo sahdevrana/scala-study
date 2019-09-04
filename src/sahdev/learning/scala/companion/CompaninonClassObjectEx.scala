@@ -1,5 +1,6 @@
 package sahdev.learning.scala.companion
 
+ 
 class CompaninonClassObjectEx {
 	private val name = "Sahdev Rana"
 			private val age = 25

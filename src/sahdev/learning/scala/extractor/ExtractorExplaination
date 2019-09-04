@@ -1,0 +1,161 @@
+link to refer=https://madusudanan.com/blog/scala-tutorials-part-15-the-apply-method/
+
+The Apply function:
+-----------------------------------------------
+The apply function
+Apply is just a mathematical name for applying a function to a value/set of values.
+
+Let’s consider that f(x) is a function with the following definition.
+
+f(x) = x+1
+In a programming language speak calling this function can be defined as Call function/method f(x) with value x. Whereas in a mathematical notation, this is usually referred as applying f(x) to value x .
+
+The wiki page explains this concept in detail.
+
+Using apply in scala
+This concept of apply is present in scala to create instances of classes in a unique way. Let’s take the below container class which represents a bunch of Strings in an array.
+
+class Container  {
+
+  //Hidden elements variable
+  private val elements = Array("Books","Pens","Laptops")
+
+  def apply(index:Int) = if(index<elements.length) elements(index) else "No element found"
+  
+}
+We have a method called apply in the class which looks like an ordinary method, but it is not. We can now consume the class and call array index of elements as below.
+
+val container = new Container
+
+println(container(2))
+The apply method is a special one which is called by default i.e calling container(2) is the same as container.apply(2) which would yield the same result.
+
+Scala apply
+
+If we put the apply method inside of a companion object then we do not need to instantiate since it would become a singleton, which then simplifies our code to a great extent. We can use println(Container(2)) and then it would print the same result as above.
+
+The compiler takes of translating the calls to the apply method.
+
+Apply in case classes
+From the infix notation chapter we take the complex number example again.
+
+case class ComplexNumber(real: Double, imaginary: Double) {
+
+    def +(number: ComplexNumber): ComplexNumber =
+      ComplexNumber(real + number.real, imaginary + number.imaginary)
+      
+}
+  
+We can create instances simply as,
+
+  val a = ComplexNumber(2, 5)
+  val b = ComplexNumber(1, -3)
+
+  val c = a.+(b)
+  
+  val d = a + b
+If we look at the decompiled code behind this case class, there is an apply method which was auto generated and goes as follows.
+
+public static ComplexNumber apply(double, double);
+    Code:
+       0: getstatic     #20                 // Field ComplexNumber$.MODULE$:LComplexNumber$;
+       3: dload_0
+       4: dload_2
+       5: invokevirtual #26                 // Method ComplexNumber$.apply:(DD)LComplexNumber;
+       8: areturn
+The apply method is static because for case classes there is an automatic companion object that is generated with a lot of boilerplate methods which does not make sense as instance and hence they are created in the companion object.
+
+Creating objects without new keyword
+To recollect what we have learnt till now, we can create instances without the new keyword in two ways.
+
+Case classes
+Object with apply method
+Case classes are a simple way to create them. You have a companion object auto generated which creates a static apply method. On compilation, all the calls such as ComplexNumber(2,1) gets compiled to ComplexNumber.apply(2,1). We can create custom classes that emulate only the apply behaviour of case classes by creating an apply method in the companion object .In the end it is just syntactic sugar, but this is all done behind the scenes by the compiler without actually resorting to a constructor.
+
+Apply is heavily used as part of the language library such as in the BigInt class and other places. This method is very important because it enables an object whether it is singleton or not to behave like a mathematical function.
+Extractor object:
+------------------------
+An extractor in Scala is an object that has a method called unapply as one of its members. 
+The purpose of that unapply method is to match a value and take it apart. 
+Often, the extractor object also defines a dual method apply for building values, but this is not required.
+
+Example
+Let us take an example of object defines both apply and unapply methods. The apply method has the same meaning as always: it turns Test into an object that can be applied to arguments in parentheses in the same way a method is applied. So you can write Test ("Zara", "gmail.com") to construct the string "Zara@gmail.com".
+
+The unapply method is what turns Test class into an extractor and it reverses the construction process of apply. Where apply takes two strings and forms an email address string out of them, unapply takes an email address and returns potentially two strings: the user and the domain of the address.
+
+The unapply must also handle the case where the given string is not an email address. That's why unapply returns an Option-type over pairs of strings. Its result is either Some (user, domain) if the string str is an email address with the given user and domain parts, or None, if str is not an email address. Here are some examples as follows.
+
+Syntax
+unapply("Zara@gmail.com") equals Some("Zara", "gmail.com")
+unapply("Zara Ali") equals None
+
+
+Following example program shows an extractor object for email addresses.
+
+
+object ExtractorExample2 {
+  
+   def main(args: Array[String]) {
+      println ("Apply method : " + apply("Zara", "gmail.com"));
+      println ("Unapply method : " + unapply("Zara@gmail.com"));
+      println ("Unapply method : " + unapply("Zara Ali"));
+      
+      val obj=ExtractorExample2("Zara", "gmail.com")
+      
+       obj match {
+         case ExtractorExample2((name,domain)) => println(name+" is the name and domain is"+domain) //Extraction depends on the return type of the unapply method
+         //unapply is invoked
+         case _ => println("i cannot calculate")
+      }
+      
+      
+         "Zara@gmail.com" match {
+         case ExtractorExample2((name,domain)) => println(name+" is the name and domain is"+domain) // //Extraction depends on the return type of the unapply method
+         //unapply is invoked
+         case _ => println("i cannot calculate")
+      }
+   }
+   
+   // The injection method (optional)
+   def apply(user: String, domain: String) = {
+      user +"@"+ domain
+   }
+
+   // The extraction method (mandatory)
+   def unapply(str: String): Option[(String, String)] = {
+      val parts = str split "@"
+      
+      if (parts.length == 2){
+         Some(parts(0), parts(1)) 
+      } else {
+         None
+      }
+   }
+}
+
+When an instance of a class is followed by parentheses with a list of zero or more parameters, 
+the compiler invokes the apply method on that instance. We can define apply both in objects and in classes.
+
+As mentioned above, the purpose of the unapply method is to extract a specific value we are looking for. 
+It does the opposite operation apply does. When comparing an extractor object using the match statement the unapply method 
+will be automatically executed.
+
+Try the following example program.
+
+Example
+object Demo {
+   def main(args: Array[String]) {
+      val x = Demo(5)
+      println(x)
+
+      x match {
+         case Demo(num) => println(x+" is bigger two times than "+num)
+         
+         //unapply is invoked
+         case _ => println("i cannot calculate")
+      }
+   }
+   def apply(x: Int) = x*2
+   def unapply(z: Int): Option[Int] = if (z%2==0) Some(z/2) else None
+}

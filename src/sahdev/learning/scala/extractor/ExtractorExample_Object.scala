@@ -36,7 +36,7 @@ object ExtractorExample {
 
 					if (parts.length == 2)
 					{
-						Some(parts(0)) 
+						Some(parts(0)) // This is the return for unapply method.
 					} 
 					else
 					{

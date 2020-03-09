@@ -16,12 +16,11 @@ object ImplicitParameter {
  def implicitVariableUsedMethod(age: Int)(implicit name:String): List[String]={ //I used currying function to differentiate between arguments.
    if (name == "Sahdev Rana"){
      println("I passed only one argument so it used implicit variable to assign value to implicit argument.")
-     return List(name,age.toString)
    }
    else {
-     println("Passed two argument so it did not use implicit variable to assign value to implicit argument.")
-     return List(name,age.toString)
+     println("Passed two argument so it did not use implicit variable to assign value to implicit argument.") 
    }
+  return List(name,age.toString)
  }
  
 }

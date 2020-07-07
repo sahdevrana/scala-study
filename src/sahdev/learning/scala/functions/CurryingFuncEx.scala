@@ -17,7 +17,7 @@ object CurryingFuncEx {
     
   }
   
-  //Currying function is when we use seprate brackets for parameters. We mostly use it for partial applied function/methods.  
+  //Currying function is when we use separate brackets for parameters. We mostly use it for partial applied function/methods.  
   def calledMethod1(a:Int,b:Int)(c:String):String={
     c+": "+a+b
   }
